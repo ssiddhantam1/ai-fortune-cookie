@@ -17,9 +17,8 @@ The **AI Fortune Cookie App** is a fun, interactive Streamlit web app that gener
 
 ## 🚀 Live Demo
 
-🔗 [Click here to open the app on Streamlit Cloud](https://your-app-url.streamlit.app)
+🔗 [Click here to open the app on Streamlit Cloud]([https://your-app-url.streamlit.app](https://2cj78v6urjwb3pyzndjo6q.streamlit.app/)
 
-*(Replace this with your actual deployed URL)*
 
 ---
 
