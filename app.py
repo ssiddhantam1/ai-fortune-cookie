@@ -19,27 +19,61 @@ st.title("🥠 AI Fortune Cookie")
 st.image("cookie_gif.gif", caption="Click the cookie, your fortune awaits...", use_container_width=True)
 
 name = st.text_input("Your Name", placeholder="e.g. Alex")
-mood = st.selectbox("How are you feeling today?", ["Happy", "Tired", "Curious", "Stressed", "Just here for cookies"])
+mood = st.selectbox(
+    "How are you feeling today?", 
+    [
+        "Happy", 
+        "Tired", 
+        "Curious", 
+        "Stressed", 
+        "Just here for cookies",
+        "Excited",
+        "Anxious",
+        "Hopeful",
+        "Lost in thought",
+        "Motivated",
+        "Hungry",
+        "Procrastinating"
+    ]
+)
 theme = st.radio("Pick your fortune theme:", ["General", "Tech Wisdom", "Career", "Silly Chaos"])
 use_ai = st.toggle("🧠 Occasionally let AI write my fortune", value=True)
 
 # --- Curated Fortunes ---
-fallback_fortunes = {
-    "General": [
-        "Greatness is coming. Probably tomorrow. Sleep in today.",
-        "Don’t take advice from cookies. Except this one."
+mood_based_fortunes  = "Excited": [
+        "Buckle up. Greatness is speeding your way!",
+        "Your energy could power a small city today.",
+        "Ride this wave—it's a good one.",
     ],
-    "Tech Wisdom": [
-        "Your code will run… eventually.",
-        "May your semicolons be ever in place."
+    "Anxious": [
+        "Breathe. You’ve overcome worse with less.",
+        "Even the moon has phases. This will pass.",
+        "Kindness begins with you—be gentle with your mind.",
     ],
-    "Career": [
-        "Opportunities are brewing. So is coffee.",
-        "Imposter syndrome is just success in disguise."
+    "Hopeful": [
+        "That feeling in your chest? That’s potential.",
+        "Hope is the seed of extraordinary days.",
+        "You’re closer than you think. Keep going.",
     ],
-    "Silly Chaos": [
-        "You will forget why you walked into the room. Twice.",
-        "Your left sock has secrets. Ask it no questions."
+    "Lost in thought": [
+        "Answers are in the silence. Listen closely.",
+        "Even the clouds make space for the sun.",
+        "Wandering minds find magical places.",
+    ],
+    "Motivated": [
+        "Today is for building empires, even small ones.",
+        "You’ve got this. The data agrees.",
+        "Let momentum be your superpower today.",
+    ],
+    "Hungry": [
+        "Fortune favors the well-fed. Treat yourself.",
+        "Your next idea comes after snacks. Probably cookies.",
+        "Food for thought? Maybe just food first.",
+    ],
+    "Procrastinating": [
+        "Even your distractions are masterpieces.",
+        "You’ll start after this fortune. Pinky swear.",
+        "Rest is productive, too. Unless it's your 5th break."
     ]
 }
 
@@ -60,7 +94,11 @@ if st.button("🥠 Crack Open Fortune"):
             raw = generator(prompt, max_length=40, do_sample=True, top_k=50,truncation=True,pad_token_id=50256)[0]["generated_text"]
             fortune = raw.replace(prompt, "").strip().split(".")[0] + "."
         else:
+            if mood in mood_based_fortunes and random.random() < 0.5:
+                fortune = random.choice(mood_based_fortunes[mood])
+            else:
             fortune = random.choice(fallback_fortunes[theme])
+
 
     # --- Typing effect ---
     placeholder = st.empty()
