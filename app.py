@@ -20,12 +20,12 @@ st.image("cookie_gif.gif", caption="Click the cookie, your fortune awaits...", u
 
 name = st.text_input("Your Name", placeholder="e.g. Alex")
 mood = st.selectbox(
-    "How are you feeling today?", 
+    "How are you feeling today?",
     [
-        "Happy", 
-        "Tired", 
-        "Curious", 
-        "Stressed", 
+        "Happy",
+        "Tired",
+        "Curious",
+        "Stressed",
         "Just here for cookies",
         "Excited",
         "Anxious",
@@ -39,8 +39,41 @@ mood = st.selectbox(
 theme = st.radio("Pick your fortune theme:", ["General", "Tech Wisdom", "Career", "Silly Chaos"])
 use_ai = st.toggle("🧠 Occasionally let AI write my fortune", value=True)
 
-# --- Curated Fortunes ---
-mood_based_fortunes  = "Excited": [
+# --- Curated Fortunes by Theme ---
+fallback_fortunes = {
+    "General": [
+        "Greatness is coming. Probably tomorrow. Sleep in today.",
+        "Don’t take advice from cookies. Except this one.",
+        "Happiness is closer than your Wi-Fi router.",
+        "A surprise is waiting in your inbox. No, not that one.",
+        "Cloudy thoughts clear with a cup of tea."
+    ],
+    "Tech Wisdom": [
+        "Your code will run… eventually.",
+        "May your semicolons be ever in place.",
+        "Today’s bug is tomorrow’s feature.",
+        "Merge conflicts build character.",
+        "Stack Overflow is your spirit animal."
+    ],
+    "Career": [
+        "Opportunities are brewing. So is coffee.",
+        "Imposter syndrome is just success in disguise.",
+        "You’re doing better than your calendar says.",
+        "Even legends started with a ‘Hello World’.",
+        "Your hustle has a glow. Keep going."
+    ],
+    "Silly Chaos": [
+        "You will forget why you walked into the room. Twice.",
+        "Your left sock has secrets. Ask it no questions.",
+        "A pigeon is thinking about you right now.",
+        "Beware of ducks with sunglasses.",
+        "Reality called — it wants a refund."
+    ]
+}
+
+# --- Curated Fortunes by Mood ---
+mood_based_fortunes = {
+    "Excited": [
         "Buckle up. Greatness is speeding your way!",
         "Your energy could power a small city today.",
         "Ride this wave—it's a good one.",
@@ -91,14 +124,13 @@ if st.button("🥠 Crack Open Fortune"):
         use_model = use_ai and random.random() < 0.5  # 50% chance of AI use
         if use_model:
             prompt = generate_prompt(mood, theme)
-            raw = generator(prompt, max_length=40, do_sample=True, top_k=50,truncation=True,pad_token_id=50256)[0]["generated_text"]
+            raw = generator(prompt, max_length=40, do_sample=True, top_k=50, truncation=True, pad_token_id=50256)[0]["generated_text"]
             fortune = raw.replace(prompt, "").strip().split(".")[0] + "."
         else:
             if mood in mood_based_fortunes and random.random() < 0.5:
                 fortune = random.choice(mood_based_fortunes[mood])
             else:
-            fortune = random.choice(fallback_fortunes[theme])
-
+                fortune = random.choice(fallback_fortunes[theme])
 
     # --- Typing effect ---
     placeholder = st.empty()
@@ -113,4 +145,3 @@ if st.button("🥠 Crack Open Fortune"):
     lucky = random.sample(range(1, 100), 6)
     st.markdown(f"🎰 **Lucky Numbers:** {' - '.join(map(str, lucky))}")
     st.markdown("<small style='color:gray;'>Model: GPT-Neo 125M • Powered by Hugging Face • Cookie GIF: Giphy</small>", unsafe_allow_html=True)
-
